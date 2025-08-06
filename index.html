@@ -88,7 +88,7 @@
         
         .baseball-diamond {
             position: absolute;
-            top: 15%;
+            top: 35%;
             left: 50%;
             transform: translateX(-50%);
             width: 160px;
@@ -134,102 +134,80 @@
             transform: rotate(-45deg);
         }
         
-        .runner-dot {
+        /* Runner batter figures with bats */
+        .runner-batter {
             position: absolute;
-            width: 14px;
-            height: 14px;
-            background: radial-gradient(circle, #FFD700, #FFA500);
-            border: 2px solid #FF6B35;
-            border-radius: 50%;
+            width: 18px;
+            height: 30px;
             display: none;
             z-index: 15;
             transform: rotate(-45deg);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
             transition: all 0.5s ease-out;
+        }
+        
+        .runner-batter .runner-batter-body {
+            width: 10px;
+            height: 20px;
+            background: #FF6B35; /* Bright yellow */
+            border-radius: 5px;
+            margin: 0 auto;
+            position: relative;
+            border: 1px solid #D2691E; /* Orange border for definition */
+        }
+        
+        .runner-batter .runner-batter-head {
+            width: 12px;
+            height: 12px;
+            background: #F4C2A1;
+            border-radius: 50%;
+            margin: 0 auto 2px;
+        }
+        
+        .runner-batter .runner-bat {
+            position: absolute;
+            width: 2px;
+            height: 18px;
+            background: linear-gradient(to bottom, #8B4513, #A0522D);
+            border-radius: 1px;
+            right: -4px;
+            top: 5px;
+            transform-origin: bottom center;
         }
         
         #runner-1 {
-            top: -14px;
-            right: -14px;
+            top: -25px;
+            right: -25px;
         }
         
         #runner-2 {
-            top: -14px;
-            left: -14px;
+            top: -25px;
+            left: -25px;
         }
         
         #runner-3 {
-            bottom: -1px;
-            right: 142px;
-        }
-        
-        .new-batter-dot {
-            position: absolute;
-            width: 14px;
-            height: 14px;
-            background: radial-gradient(circle, #32CD32, #228B22) !important;
-            border: 3px solid #006400 !important;
-            border-radius: 50%;
-            z-index: 16;
-            transform: rotate(-45deg);
-            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
-            display: block !important;
-            opacity: 1 !important;
-            bottom: 10px;
-            right: 10px;
-            transition: all 0.5s ease-out;
-        }
-        
-        .new-batter-appear {
-            animation: newBatterBounce 1s ease-out forwards;
-        }
-
-        @keyframes newBatterBounce {
-            0% { 
-                transform: rotate(-45deg) scale(0.3);
-                opacity: 0;
-            }
-            50% { 
-                transform: rotate(-45deg) scale(1.2);
-                opacity: 0.8;
-            }
-            100% { 
-                transform: rotate(-45deg) scale(1);
-                opacity: 1;
-            }
+            bottom: -15px;
+            right: 135px;
         }
 
         .moving {
-            transform: rotate(-45deg) scale(1.3);
-            opacity: 0.6;
-        }
-        
-        .pitcher-mound {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-45deg);
-            width: 16px;
-            height: 16px;
-            background: radial-gradient(circle, #8B4513, #A0522D);
-            border-radius: 50%;
-            border: 2px solid white;
+            transform: rotate(-45deg) scale(1.1);
+            opacity: 0.7;
         }
         
         .batter-box {
             position: absolute;
-            bottom: 20%;
+            bottom: 5%;
             left: 50%;
             transform: translateX(-50%);
-            width: 50px;
-            height: 30px;
+            width: 60px;
+            height: 50px;
             border: 2px solid white;
             background: rgba(139, 69, 19, 0.4);
         }
         
         .batter {
             position: absolute;
-            bottom: 22%;
+            bottom: 8%;
             left: 50%;
             transform: translateX(-50%);
             width: 25px;
@@ -272,7 +250,7 @@
         
         .pitcher {
             position: absolute;
-            top: 30%;
+            top: 52%;
             left: 50%;
             transform: translateX(-50%);
             width: 22px;
@@ -458,8 +436,8 @@
             position: absolute;
             bottom: 20px;
             right: 20px;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             z-index: 25;
         }
         
@@ -479,9 +457,21 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: conic-gradient(from 0deg, #FFD700 0deg, transparent 0deg);
+            background: conic-gradient(from 0deg, #FFFFFF 0deg, transparent 0deg);
             border-radius: 50%;
             transition: all 0.5s ease;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.8));
+        }
+        
+        .rage-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            z-index: 30;
+            display: block;
         }
         
         .ball-progress-text {
@@ -489,10 +479,43 @@
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             font-weight: bold;
             color: white;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        
+        .rage-mode-active .ball-progress-fill {
+            background: conic-gradient(from 0deg, #FFFFFF 0deg, #FFFFFF 360deg) !important;
+            animation: rageGlow 1s infinite alternate !important;
+            filter: drop-shadow(0 0 20px rgba(255, 255, 255, 1)) !important;
+        }
+        
+        /* .rage-mode-active .rage-icon {
+            display: block;
+            animation: ragePulse 0.5s infinite alternate;
+        } */
+        
+        .rage-mode-active .ball-progress-text {
+            display: none;
+        }
+        
+        @keyframes rageGlow {
+            0% { 
+                filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.8));
+            }
+            100% { 
+                filter: drop-shadow(0 0 25px rgba(255, 255, 255, 1));
+            }
+        }
+        
+        .rage-mode-active {
+            animation: ragePulse 0.5s infinite alternate;
+        }
+        
+        @keyframes ragePulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
         }
         
         .game-status {
@@ -641,6 +664,28 @@
             width: 40%;
         }
         
+        .power-btn.rage-mode .batter-option-progress-fill {
+            background: linear-gradient(90deg, #00FF00, #32CD32) !important;
+            width: 99% !important;
+            animation: rageBarPulse 0.5s infinite alternate;
+        }
+        
+        .power-btn.rage-mode {
+            background: linear-gradient(135deg, #2196F3, #1976D2) !important;
+            box-shadow: 0 0 15px #FFD700 !important;
+            animation: rageBtnPulse 0.5s infinite alternate;
+        }
+        
+        @keyframes rageBarPulse {
+            0% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+        
+        @keyframes rageBtnPulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        
         .button:disabled {
             opacity: 0.6;
             cursor: not-allowed;
@@ -751,14 +796,14 @@
         }
         
         .strike-zone {
-            position: absolute;
+            /* position: absolute;
             bottom: 25%;
             left: 50%;
             transform: translateX(-50%);
-            width: 70px;
-            height: 50px;
+            width: 65px;
+            height: 55px;
             border: 2px dashed rgba(255, 255, 255, 0.5);
-            display: none;
+            display: none; */
         }
 
         @media (max-height: 700px) {
@@ -801,14 +846,26 @@
             }
             
             .ball-progress-indicator {
-                width: 40px;
-                height: 40px;
+                width: 50px;
+                height: 50px;
                 bottom: 15px;
                 right: 15px;
             }
             
             .ball-progress-text {
                 font-size: 0.7rem;
+            }
+            
+            .rage-icon {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .runner-batter .runner-bat {
+                width: 1.5px;
+                height: 15px;
+                right: -3px;
+                top: 4px;
             }
         }
     </style>
@@ -850,13 +907,26 @@
                     <div class="base first-base"></div>
                     <div class="base second-base"></div>
                     <div class="base third-base"></div>
-                    <div class="pitcher-mound"></div>
                     
-                    <div class="runner-dot" id="runner-1"></div>
-                    <div class="runner-dot" id="runner-2"></div>
-                    <div class="runner-dot" id="runner-3"></div>
-                    
-                    <div class="new-batter-dot" id="new-batter"></div>
+                    <!-- Runner batter figures with bats -->
+                    <div class="runner-batter" id="runner-1">
+                        <div class="runner-batter-head"></div>
+                        <div class="runner-batter-body">
+                            <div class="runner-bat"></div>
+                        </div>
+                    </div>
+                    <div class="runner-batter" id="runner-2">
+                        <div class="runner-batter-head"></div>
+                        <div class="runner-batter-body">
+                            <div class="runner-bat"></div>
+                        </div>
+                    </div>
+                    <div class="runner-batter" id="runner-3">
+                        <div class="runner-batter-head"></div>
+                        <div class="runner-batter-body">
+                            <div class="runner-bat"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
@@ -885,6 +955,7 @@
             <div class="ball-progress-indicator" id="ball-progress">
                 <div class="ball-progress-circle">
                     <div class="ball-progress-fill" id="ball-progress-fill"></div>
+                    <img src="rage.png" alt="Rage" class="rage-icon" id="rage-icon">
                     <div class="ball-progress-text" id="ball-progress-text">0/3</div>
                 </div>
             </div>
@@ -910,111 +981,116 @@
                         CURVEBALL
                     </button>
                     <button class="pitch-type-btn sinker" onclick="throwPitch('sinker')">
-                        <img src="ball.png" alt="Ball" class="pitch-img">
-                        SINKER
+                       <img src="ball.png" alt="Ball" class="pitch-img">
+                       SINKER
+                   </button>
+               </div>
+           </div>
+           
+           <div id="batter-controls" style="display: none;">
+               <div class="batter-options">
+                   <div class="batter-option-container">
+                       <div class="batter-option-percentage">80%</div>
+                      <button class="batter-option-btn leave-btn" onclick="selectBatterAction('leave')">
+                         <div class="batter-option-progress">
+                             <div class="batter-option-progress-fill"></div>
+                         </div>
+                         <div class="batter-option-digit">0</div>
+                         <span class="batter-option-name">LEAVE</span>
+                     </button>
+                 </div>
+                 <div class="batter-option-container">
+                     <div class="batter-option-percentage">60%</div>
+                     <button class="batter-option-btn bunt-btn" onclick="selectBatterAction('bunt')">
+                        <div class="batter-option-progress">
+                            <div class="batter-option-progress-fill"></div>
+                        </div>
+                        <div class="batter-option-digit">1</div>
+                        <span class="batter-option-name">BUNT</span>
                     </button>
-                </div>
-            </div>
-            
-            <div id="batter-controls" style="display: none;">
-                <div class="batter-options">
-                    <div class="batter-option-container">
-                        <div class="batter-option-percentage">80%</div>
-                        <button class="batter-option-btn leave-btn" onclick="selectBatterAction('leave')">
-                            <div class="batter-option-progress">
-                                <div class="batter-option-progress-fill"></div>
-                            </div>
-                            <div class="batter-option-digit">0</div>
-                            <span class="batter-option-name">LEAVE</span>
-                        </button>
-                    </div>
-                    <div class="batter-option-container">
-                        <div class="batter-option-percentage">60%</div>
-                        <button class="batter-option-btn bunt-btn" onclick="selectBatterAction('bunt')">
-                           <div class="batter-option-progress">
-                               <div class="batter-option-progress-fill"></div>
-                           </div>
-                           <div class="batter-option-digit">1</div>
-                           <span class="batter-option-name">BUNT</span>
-                       </button>
-                    </div>
-                    <div class="batter-option-container">
-                        <div class="batter-option-percentage">50%</div>
-                        <button class="batter-option-btn contact-btn" onclick="selectBatterAction('contact')">
-                           <div class="batter-option-progress">
-                               <div class="batter-option-progress-fill"></div>
-                           </div>
-                           <div class="batter-option-digit">2</div>
-                           <span class="batter-option-name">CONTACT</span>
-                       </button>
-                    </div>
-                    <div class="batter-option-container">
-                        <div class="batter-option-percentage">40%</div>
-                        <button class="batter-option-btn power-btn" onclick="selectBatterAction('power')">
-                           <div class="batter-option-progress">
-                               <div class="batter-option-progress-fill"></div>
-                           </div>
-                           <div class="batter-option-digit">4</div>
-                           <span class="batter-option-name">HOMERUN</span>
-                       </button>
-                    </div>
-      </div>
-  </div>
+                 </div>
+                 <div class="batter-option-container">
+                     <div class="batter-option-percentage">50%</div>
+                     <button class="batter-option-btn contact-btn" onclick="selectBatterAction('contact')">
+                        <div class="batter-option-progress">
+                            <div class="batter-option-progress-fill"></div>
+                        </div>
+                        <div class="batter-option-digit">2</div>
+                        <span class="batter-option-name">CONTACT</span>
+                    </button>
+                 </div>
+                 <div class="batter-option-container">
+                     <div class="batter-option-percentage" id="power-percentage">40%</div>
+                     <button class="batter-option-btn power-btn" onclick="selectBatterAction('power')" id="power-btn">
+                        <div class="batter-option-progress">
+                            <div class="batter-option-progress-fill"></div>
+                        </div>
+                        <div class="batter-option-digit">4</div>
+                        <span class="batter-option-name">HOMERUN</span>
+                    </button>
+                 </div>
+             </div>
+         </div>
+     </div>
+ </div>
 
-  <script>
-      const gameState = {
-          runs: 0,
-          balls: 0,
-          strikes: 0,
-          outs: 0,
-          inning: 1,
-          selectedPitch: null,
-          selectedBatterAction: null,
-          gamePhase: 'pitching',
-          batterNumber: 1,
-      };
+ <script>
+     const gameState = {
+         runs: 0,
+         balls: 0,
+         strikes: 0,
+         outs: 0,
+         inning: 1,
+         selectedPitch: null,
+         selectedBatterAction: null,
+         gamePhase: 'pitching',
+         batterNumber: 1,
+         rageMode: false,
+         rageUsed: false, // Track if rage mode shot has been used
+         leaves: 0
+     };
 
-      const baseRunners = [false, false, false];
+     const baseRunners = [false, false, false];
 
-      const pitchTypes = {
-          outside: { name: 'Outside', isStrike: false },
-          fastball: { name: 'Fastball', isStrike: true },
-          curveball: { name: 'Curveball', isStrike: true },
-          sinker: { name: 'Sinker', isStrike: true }
-      };
+     const pitchTypes = {
+         outside: { name: 'Outside', isStrike: false },
+         fastball: { name: 'Fastball', isStrike: true },
+         curveball: { name: 'Curveball', isStrike: true },
+         sinker: { name: 'Sinker', isStrike: true }
+     };
 
-      const batterActions = {
-          leave: { 
-              name: 'Leave', 
-              successChance: 0.80,
-              runs: 0,
-              catchChance: 0.10,
-              strikeChance: 0.10
-          },
-          bunt: { 
-              name: 'Bunt', 
-              successChance: 0.60,
-              runs: 1,
-              catchChance: 0.15,
-              strikeChance: 0.25
-          },
-          contact: { 
-              name: 'Contact', 
-              successChance: 0.50,
-              runs: 2,
-              catchChance: 0.25,
-              strikeChance: 0.25
-          },
-          power: { 
-              name: 'Power', 
-              successChance: 0.40,
-              runs: 4,
-              catchChance: 0.30,
-              strikeChance: 0.30
-          }
-      };
+     const batterActions = {
+         leave: { 
+             name: 'Leave', 
+             successChance: 0.80,
+             runs: 0,
+             catchChance: 0.10,
+             strikeChance: 0.10
+         },
+         bunt: { 
+             name: 'Bunt', 
+             successChance: 0.60,
+             runs: 1,
+             catchChance: 0.15,
+             strikeChance: 0.25
+         },
+         contact: { 
+             name: 'Contact', 
+             successChance: 0.50,
+             runs: 2,
+             catchChance: 0.25,
+             strikeChance: 0.25
+         },
+         power: { 
+             name: 'Power', 
+             successChance: 0.40,
+             runs: 4,
+             catchChance: 0.30,
+             strikeChance: 0.30
+         }
+     };
 
-      const elements = {
+     const elements = {
          runs: document.getElementById('runs'),
          balls: document.getElementById('balls'),
          strikes: document.getElementById('strikes'),
@@ -1024,423 +1100,473 @@
          baseball: document.getElementById('baseball'),
          batter: document.getElementById('batter'),
          bat: document.getElementById('bat'),
-        pitcher: document.getElementById('pitcher'),
-        timingZone: document.getElementById('timing-zone'),
-        strikeZone: document.getElementById('strike-zone'),
-        pitchControls: document.getElementById('pitch-controls'),
-        batterControls: document.getElementById('batter-controls'),
-        resultPopup: document.getElementById('result-popup'),
-        runner1: document.getElementById('runner-1'),
-        runner2: document.getElementById('runner-2'),
-        runner3: document.getElementById('runner-3'),
-        newBatter: document.getElementById('new-batter'),
-        ballProgressFill: document.getElementById('ball-progress-fill'),
-        ballProgressText: document.getElementById('ball-progress-text')
-    };
+         pitcher: document.getElementById('pitcher'),
+         timingZone: document.getElementById('timing-zone'),
+         strikeZone: document.getElementById('strike-zone'),
+         pitchControls: document.getElementById('pitch-controls'),
+         batterControls: document.getElementById('batter-controls'),
+         resultPopup: document.getElementById('result-popup'),
+         runner1: document.getElementById('runner-1'),
+         runner2: document.getElementById('runner-2'),
+         runner3: document.getElementById('runner-3'),
+         ballProgressFill: document.getElementById('ball-progress-fill'),
+         ballProgressText: document.getElementById('ball-progress-text'),
+         ballProgress: document.getElementById('ball-progress'),
+         rageIcon: document.getElementById('rage-icon'),
+         powerBtn: document.getElementById('power-btn'),
+         powerPercentage: document.getElementById('power-percentage')
+     };
 
-    function initGame() {
-        resetBallPosition();
-        updateUI();
-        updateRunnerDisplay();
-        updateBallProgress();
-        showNewBatter();
-        updateGameStatus(`Facing Hitter #${gameState.batterNumber}, Choose your pitch`);
-    }
+     function initGame() {
+         resetBallPosition();
+         updateUI();
+         updateRunnerDisplay();
+         updateBallProgress();
+         updateGameStatus(`Facing Hitter #${gameState.batterNumber}, Choose your pitch`);
+     }
 
-    function showNewBatter() {
-        elements.newBatter.style.display = 'block';
-        elements.newBatter.style.opacity = '1';
-        elements.newBatter.classList.add('new-batter-appear');
-        setTimeout(() => {
-            elements.newBatter.classList.remove('new-batter-appear');
-        }, 1000);
-    }
+     function showNewBatter() {
+         // Clean home plate - no extra figures
+     }
 
-    function hideNewBatter() {
-        elements.newBatter.style.display = 'none';
-        elements.newBatter.style.opacity = '0';
-    }
+     function hideNewBatter() {
+         // Clean home plate - no extra figures
+     }
 
-    function updateBallProgress() {
-        const progress = (gameState.balls / 3) * 360;
-        elements.ballProgressFill.style.background = `conic-gradient(from 0deg, #FFD700 ${progress}deg, transparent ${progress}deg)`;
-        elements.ballProgressText.textContent = `${gameState.balls}/3`;
-        
-        // Add pulsing effect when close to 3 balls
-        if (gameState.balls === 2) {
-            elements.ballProgressFill.style.animation = 'pulse 1s infinite';
-        } else {
-            elements.ballProgressFill.style.animation = 'none';
-        }
-    }
+     function updateBallProgress() {
+         const progress = (gameState.leaves / 3) * 360;
+         elements.ballProgressFill.style.background = `conic-gradient(from 0deg, #FFFFFF ${progress}deg, transparent ${progress}deg)`;
+         elements.ballProgressFill.style.filter = `drop-shadow(0 0 10px rgba(255, 255, 255, 0.8))`;
+         elements.ballProgressText.textContent = `${gameState.leaves}/3`;
+         
+         // Check for rage mode activation
+         if (gameState.leaves >= 3 && !gameState.rageMode) {
+             activateRageMode();
+         }
+         
+         // Add pulsing effect when close to 3 leaves
+         if (gameState.leaves === 2) {
+             elements.ballProgress.style.animation = 'pulse 1s infinite';
+         } else {
+             elements.ballProgress.style.animation = 'none';
+         }
+     }
 
-    // Add pulse animation for when close to free run
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.6; }
-            100% { opacity: 1; }
-        }
-    `;
-    document.head.appendChild(style);
+     function activateRageMode() {
+    gameState.rageMode = true;
+    gameState.rageUsed = false; // Reset rage used flag
+    
+    // Update progress bar to full with rage colors
+    elements.ballProgressFill.style.background = 'conic-gradient(from 0deg, #FFFFFF 0deg, #FFFFFF 360deg)';
+    elements.ballProgress.classList.add('rage-mode-active');
+    elements.powerBtn.classList.add('rage-mode');
+    elements.powerPercentage.textContent = '99%';
+    
+    // Show rage activation message
+    showResult('RAGE MODE ACTIVATED! 🔥', 'rage');
+    
+    // IMMEDIATELY show batting options instead of pitching options
+    elements.pitchControls.style.display = 'none';
+    elements.batterControls.style.display = 'block';
+    gameState.gamePhase = 'batting';
+    
+    // Update game status to show batting options
+    updateGameStatus(`RAGE MODE, activated `);
+}
 
-    function updateBaseRunners(runs) {
-        let runsScored = 0;
-        
-        // Hide the green batter immediately
-        hideNewBatter();
-        
-        // Add visual effect to show movement
-        document.querySelectorAll('.runner-dot').forEach(dot => {
-            dot.classList.add('moving');
-        });
-        
-        // Calculate runs scored and update bases
-        switch (runs) {
-            case 1: // Single
-                if (baseRunners[2]) runsScored++;
-                baseRunners[2] = baseRunners[1];
-                baseRunners[1] = baseRunners[0];
-                baseRunners[0] = true;
-                break;
-                
-            case 2: // Double  
-                if (baseRunners[1]) runsScored++;
-                if (baseRunners[2]) runsScored++;
-                baseRunners[2] = baseRunners[0];
-                baseRunners[1] = true;
-                baseRunners[0] = false;
-                break;
-                
-            case 4: // Homerun
-                runsScored = 1;
-                if (baseRunners[0]) runsScored++;
-                if (baseRunners[1]) runsScored++;
-                if (baseRunners[2]) runsScored++;
-                baseRunners[0] = false;
-                baseRunners[1] = false;
-                baseRunners[2] = false;
-                break;
-        }
-        
-        gameState.runs += runsScored;
-        gameState.batterNumber++;
-        
-        // Update display after short animation
-        setTimeout(() => {
-            document.querySelectorAll('.runner-dot').forEach(dot => {
-                dot.classList.remove('moving');
-            });
-            updateRunnerDisplay();
-            updateUI();
-            showNewBatter();
-        }, 800);
-        
-        return runsScored;
-    }
 
-    function updateRunnerDisplay() {
-        elements.runner1.style.display = baseRunners[0] ? 'block' : 'none';
-        elements.runner2.style.display = baseRunners[1] ? 'block' : 'none';
-        elements.runner3.style.display = baseRunners[2] ? 'block' : 'none';
-    }
+     function deactivateRageMode() {
+         gameState.rageMode = false;
+         gameState.rageUsed = false;
+         gameState.leaves = 0;
+         
+         elements.ballProgress.classList.remove('rage-mode-active');
+         elements.powerBtn.classList.remove('rage-mode');
+         elements.powerPercentage.textContent = '40%';
+         
+         updateBallProgress();
+     }
 
-    function clearBases() {
-        baseRunners[0] = false;
-        baseRunners[1] = false;
-        baseRunners[2] = false;
-        updateRunnerDisplay();
-        hideNewBatter();
-        setTimeout(() => {
-            showNewBatter();
-        }, 300);
-    }
+     // Add pulse animation for when close to rage mode
+     const style = document.createElement('style');
+     style.textContent = `
+         @keyframes pulse {
+             0% { opacity: 1; }
+             50% { opacity: 0.6; }
+             100% { opacity: 1; }
+         }
+     `;
+     document.head.appendChild(style);
 
-    function throwPitch(pitchType) {
-        gameState.selectedPitch = pitchType;
+     function updateBaseRunners(runs) {
+         let runsScored = 0;
+         
+         // Add visual effect to show movement
+         document.querySelectorAll('.runner-batter').forEach(batter => {
+             batter.classList.add('moving');
+         });
+         
+         // Calculate runs scored and update bases
+         switch (runs) {
+             case 1: // Single
+                 if (baseRunners[2]) runsScored++;
+                 baseRunners[2] = baseRunners[1];
+                 baseRunners[1] = baseRunners[0];
+                 baseRunners[0] = true;
+                 break;
+                 
+             case 2: // Double  
+                 if (baseRunners[1]) runsScored++;
+                 if (baseRunners[2]) runsScored++;
+                 baseRunners[2] = baseRunners[0];
+                 baseRunners[1] = true;
+                 baseRunners[0] = false;
+                 break;
+                 
+             case 4: // Homerun
+                 runsScored = 1;
+                 if (baseRunners[0]) runsScored++;
+                 if (baseRunners[1]) runsScored++;
+                 if (baseRunners[2]) runsScored++;
+                 baseRunners[0] = false;
+                 baseRunners[1] = false;
+                 baseRunners[2] = false;
+                 break;
+         }
+         
+         gameState.runs += runsScored;
+         gameState.batterNumber++;
+         
+         // Update display after short animation
+         setTimeout(() => {
+             document.querySelectorAll('.runner-batter').forEach(batter => {
+                 batter.classList.remove('moving');
+             });
+             updateRunnerDisplay();
+             updateUI();
+         }, 800);
+         
+         return runsScored;
+     }
+
+     function updateRunnerDisplay() {
+         elements.runner1.style.display = baseRunners[0] ? 'block' : 'none';
+         elements.runner2.style.display = baseRunners[1] ? 'block' : 'none';
+         elements.runner3.style.display = baseRunners[2] ? 'block' : 'none';
+     }
+
+     function clearBases() {
+         baseRunners[0] = false;
+         baseRunners[1] = false;
+         baseRunners[2] = false;
+         updateRunnerDisplay();
+     }
+
+     function throwPitch(pitchType) {
+         gameState.selectedPitch = pitchType;
+         gameState.gamePhase = 'batting';
+         
+         elements.pitchControls.style.display = 'none';
+         elements.strikeZone.style.display = 'block';
+         
+         animatePitch(pitchTypes[pitchType]);
+         
+         if (gameState.rageMode) {
+             updateGameStatus(`RAGE MODE activated`);
+         } else {
+             updateGameStatus(`Hitter #${gameState.batterNumber}: Choose your shot`);
+         }
+         
+         setTimeout(() => {
+             elements.batterControls.style.display = 'block';
+         }, 1200);
+     }
+
+     function selectBatterAction(action) {
+         gameState.selectedBatterAction = action;
+         
+         // If rage mode is active and any action is selected, mark it as used
+         if (gameState.rageMode) {
+             gameState.rageUsed = true;
+         }
+         
+         document.querySelectorAll('.batter-option-btn').forEach(btn => {
+             btn.style.opacity = '0.6';
+             btn.style.transform = 'scale(0.95)';
+         });
+         
+         event.target.style.opacity = '1';
+         event.target.style.transform = 'scale(1.05)';
+         
+         setTimeout(() => {
+             resolveBatterAction();
+         }, 500);
+     }
+
+     function resolveBatterAction() {
+         const batterAction = batterActions[gameState.selectedBatterAction];
+         
+         let result = '';
+         let message = '';
+         let runsScored = 0;
+         
+         if (gameState.selectedBatterAction === 'leave') {
+             // Only add to balls/leaves if not in rage mode
+             if (!gameState.rageMode) {
+                 result = 'ball';
+                 message = `Batter #${gameState.batterNumber}: That's a ball. ✅`;
+                 gameState.balls++;
+                 gameState.leaves++;
+                 updateBallProgress();
+             } else {
+                 // In rage mode, leaving still uses up the rage mode
+                 result = 'ball';
+                 message = `Batter #${gameState.batterNumber}: Rage mode wasted on a leave.`;
+             }
+         } else {
+             // Handle hitting actions
+             let roll = Math.random();
+             let successChance = batterAction.successChance;
+             
+             // In rage mode, power has 99% success chance
+             if (gameState.rageMode && gameState.selectedBatterAction === 'power') {
+                 successChance = 0.99;
+             }
+             
+             if (roll < successChance) {
+                 result = 'success';
+                 runsScored = updateBaseRunners(batterAction.runs);
+                 
+                 let actionName = '';
+                 switch (gameState.selectedBatterAction) {
+                     case 'bunt':
+                         actionName = 'Successful bunt!';
+                         animateBallFlight('single');
+                         break;
+                     case 'contact':
+                         actionName = 'Double scored!';
+                         animateBallFlight('double');
+                         break;
+                     case 'power':
+                         actionName = gameState.rageMode ? 'RAGE HOMERUN! 🔥' : 'HOME RUN!';
+                         animateBallFlight('homerun');
+                         showHomerunEffect();
+                         break;
+                 }
+                 
+                 message = `Batter #${gameState.batterNumber - 1}: ${actionName} +${runsScored} run${runsScored !== 1 ? 's' : ''}!`;
+             } else {
+                 const failureRoll = Math.random();
+                 const totalFailure = batterAction.catchChance + batterAction.strikeChance;
+                 const catchThreshold = batterAction.catchChance / totalFailure;
+                 
+                 if (failureRoll < catchThreshold) {
+                     result = 'catch';
+                     message = `Batter #${gameState.batterNumber}: Ball caught, OUT`;
+                     gameState.outs++;
+                     gameState.batterNumber++;
+                 } else {
+                     result = 'strike';
+                     message = `Batter #${gameState.batterNumber}: STRIKE!`;
+                     gameState.strikes++;
+                 }
+             }
+         }
+         
+         // Deactivate rage mode after any action is taken
+         if (gameState.rageMode && gameState.rageUsed) {
+             setTimeout(() => {
+                 deactivateRageMode();
+             }, 1000);
+         }
+         
+         if (gameState.selectedBatterAction !== 'leave') {
+             elements.bat.classList.add('swinging');
+             elements.batter.style.transform = 'translateX(-50%) scale(1.1)';
+             
+             setTimeout(() => {
+                 elements.bat.classList.remove('swinging');
+                 elements.batter.style.transform = 'translateX(-50%) scale(1)';
+             }, 300);
+         }
+         
+         showResult(message, result);
+         
+         setTimeout(() => {
+             checkGameState();
+         }, 500);
+     }
+
+     function animateBallFlight(type) {
+         const ball = elements.baseball;
+         ball.classList.remove('flying-single', 'flying-double', 'flying-homerun');
+         
+         setTimeout(() => {
+             ball.classList.add(`flying-${type}`);
+         }, 100);
+     }
+
+     function animatePitch(pitch) {
+         const ball = elements.baseball;
+         
+         ball.style.left = '48%';
+         ball.style.top = '52%';
+         ball.style.display = 'block';
+         
+         setTimeout(() => {
+             ball.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+             
+             if (gameState.selectedPitch === 'outside') {
+                 ball.style.left = '65%';
+                 ball.style.top = '90%';
+             } else if (gameState.selectedPitch === 'curveball') {
+                 ball.style.left = '48%';
+                 ball.style.top = '90%';
+             } else if (gameState.selectedPitch === 'sinker') {
+                 ball.style.left = '50%';
+                 ball.style.top = '93%';
+             } else {
+                 ball.style.left = '50%';
+                 ball.style.top = '88%';
+             }
+         }, 100);
+     }
+
+     function showResult(message, type) {
+         elements.resultPopup.textContent = message;
+         elements.resultPopup.style.display = 'block';
+         
+         if (type === 'success') {
+             elements.resultPopup.style.borderColor = '#4CAF50';
+             elements.resultPopup.style.color = '#4CAF50';
+         } else if (type === 'ball') {
+             elements.resultPopup.style.borderColor = '#FFD700';
+             elements.resultPopup.style.color = '#FFD700';
+         } else if (type === 'rage') {
+             elements.resultPopup.style.borderColor = '#FF4500';
+             elements.resultPopup.style.color = '#FF4500';
+         } else {
+             elements.resultPopup.style.borderColor = '#FF6B35';
+             elements.resultPopup.style.color = '#FF6B35';
+         }
+         
+         setTimeout(() => {
+             elements.resultPopup.style.display = 'none';
+         }, 2500);
+     }
+
+     function showHomerunEffect() {
+         const effect = document.createElement('div');
+         effect.className = 'homerun-effect';
+         document.querySelector('.field-container').appendChild(effect);
+         
+         setTimeout(() => {
+             effect.remove();
+         }, 1000);
+     }
+
+     function checkGameState() {
+         updateUI();
+         updateBallProgress();
+         
+         if (gameState.strikes >= 3) {
+             gameState.outs++;
+             gameState.strikes = 0;
+             gameState.balls = 0;
+             gameState.batterNumber++;
+             updateGameStatus(`Strikeout! Hitter #${gameState.batterNumber} coming up.`);
+         }
+         
+         if (gameState.outs >= 3) {
+             gameState.inning++;
+             gameState.outs = 0;
+             gameState.batterNumber = 1;
+             if (gameState.rageMode) {
+                 deactivateRageMode();
+             }
+             clearBases();
+             updateGameStatus(`End of inning ${gameState.inning - 1}! Inning ${gameState.inning} - Hitter #1 up!`);
+         }
+         
+         setTimeout(() => {
+             resetForNextPitch();
+         }, 800);
+     }
+
+     function resetForNextPitch() {
+    gameState.selectedPitch = null;
+    gameState.selectedBatterAction = null;
+    
+    // Reset button states
+    document.querySelectorAll('.batter-option-btn').forEach(btn => {
+        btn.style.opacity = '1';
+        btn.style.transform = 'scale(1)';
+    });
+    
+    resetBallPosition();
+    
+    // If rage mode is STILL active (not used yet), show batting options
+    if (gameState.rageMode && !gameState.rageUsed) {
         gameState.gamePhase = 'batting';
-        
         elements.pitchControls.style.display = 'none';
-        elements.strikeZone.style.display = 'block';
-        
-        animatePitch(pitchTypes[pitchType]);
-        updateGameStatus(`Hitter #${gameState.batterNumber}: Choose your shot`);
-        setTimeout(() => {
-            elements.batterControls.style.display = 'block';
-        }, 1200);
-    }
-
-    function selectBatterAction(action) {
-        gameState.selectedBatterAction = action;
-        
-        document.querySelectorAll('.batter-option-btn').forEach(btn => {
-            btn.style.opacity = '0.6';
-            btn.style.transform = 'scale(0.95)';
-        });
-        
-        event.target.style.opacity = '1';
-        event.target.style.transform = 'scale(1.05)';
-        
-        setTimeout(() => {
-            resolveBatterAction();
-        }, 500);
-    }
-
-    function resolveBatterAction() {
-        const pitch = pitchTypes[gameState.selectedPitch];
-        const batterAction = batterActions[gameState.selectedBatterAction];
-        
-        let result = '';
-        let message = '';
-        let runsScored = 0;
-        
-        if (gameState.selectedBatterAction === 'leave') {
-            // Always count as ball when leaving, regardless of pitch type
-            result = 'ball';
-            message = `Batter #${gameState.batterNumber}: That's a ball. ✅`;
-            gameState.balls++;
-        } else {
-            // Handle swinging at outside pitches
-            if (gameState.selectedPitch === 'outside') {
-                result = 'strike';
-                message = `Batter #${gameState.batterNumber}: STRIKE! ⚾`;
-                gameState.strikes++;
-            } else {
-                // Normal swing resolution for strikes
-                const roll = Math.random();
-                
-                if (roll < batterAction.successChance) {
-                    result = 'success';
-                    runsScored = updateBaseRunners(batterAction.runs);
-                    
-                    let actionName = '';
-                    switch (gameState.selectedBatterAction) {
-                        case 'bunt':
-                            actionName = 'Successful bunt!';
-                            animateBallFlight('single');
-                            break;
-                        case 'contact':
-                            actionName = 'Double scored!';
-                            animateBallFlight('double');
-                            break;
-                        case 'power':
-                            actionName = 'HOME RUN!';
-                            animateBallFlight('homerun');
-                            showHomerunEffect();
-                            break;
-                    }
-                    
-                    if (gameState.selectedBatterAction === 'power') {
-                        message = `Batter #${gameState.batterNumber - 1}: ${actionName} +${runsScored} run${runsScored !== 1 ? 's' : ''}!`;
-                    } else {
-                        message = `Batter #${gameState.batterNumber - 1}: ${actionName}${runsScored > 0 ? ` +${runsScored} run${runsScored !== 1 ? 's' : ''}!` : ''}`;
-                    }
-                } else {
-                    const failureRoll = Math.random();
-                    const totalFailure = batterAction.catchChance + batterAction.strikeChance;
-                    const catchThreshold = batterAction.catchChance / totalFailure;
-                    
-                    if (failureRoll < catchThreshold) {
-                        result = 'catch';
-                        message = `Batter #${gameState.batterNumber}: Ball caught, OUT`;
-                        gameState.outs++;
-                        gameState.batterNumber++;
-                    } else {
-                        result = 'strike';
-                        message = `Batter #${gameState.batterNumber}: STRIKE!`;
-                        gameState.strikes++;
-                    }
-                }
-            }
-        }
-        
-        if (gameState.selectedBatterAction !== 'leave') {
-            elements.bat.classList.add('swinging');
-            elements.batter.style.transform = 'translateX(-50%) scale(1.1)';
-            
-            setTimeout(() => {
-                elements.bat.classList.remove('swinging');
-                elements.batter.style.transform = 'translateX(-50%) scale(1)';
-            }, 300);
-        }
-        
-        showResult(message, result);
-        
-        setTimeout(() => {
-            checkGameState();
-        }, 500);
-    }
-
-    function animateBallFlight(type) {
-        const ball = elements.baseball;
-        ball.classList.remove('flying-single', 'flying-double', 'flying-homerun');
-        
-        setTimeout(() => {
-            ball.classList.add(`flying-${type}`);
-        }, 100);
-    }
-
-    function animatePitch(pitch) {
-        const ball = elements.baseball;
-        
-        ball.style.left = '50%';
-        ball.style.top = '30%';
-        ball.style.display = 'block';
-        
-        setTimeout(() => {
-            ball.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-            
-            if (gameState.selectedPitch === 'outside') {
-                ball.style.left = '70%';
-                ball.style.top = '70%';
-            } else if (gameState.selectedPitch === 'curveball') {
-                ball.style.left = '45%';
-                ball.style.top = '73%';
-            } else if (gameState.selectedPitch === 'sinker') {
-                ball.style.left = '50%';
-                ball.style.top = '77%';
-            } else {
-                ball.style.left = '50%';
-                ball.style.top = '70%';
-            }
-        }, 100);
-    }
-
-    function showResult(message, type) {
-        elements.resultPopup.textContent = message;
-        elements.resultPopup.style.display = 'block';
-        
-        if (type === 'success') {
-            elements.resultPopup.style.borderColor = '#4CAF50';
-            elements.resultPopup.style.color = '#4CAF50';
-        } else if (type === 'ball') {
-            elements.resultPopup.style.borderColor = '#FFD700';
-            elements.resultPopup.style.color = '#FFD700';
-        } else {
-            elements.resultPopup.style.borderColor = '#FF6B35';
-            elements.resultPopup.style.color = '#FF6B35';
-        }
-        
-        setTimeout(() => {
-            elements.resultPopup.style.display = 'none';
-        }, 2500);
-    }
-
-    function showHomerunEffect() {
-        const effect = document.createElement('div');
-        effect.className = 'homerun-effect';
-        document.querySelector('.field-container').appendChild(effect);
-        
-        setTimeout(() => {
-            effect.remove();
-        }, 1000);
-    }
-
-    function checkGameState() {
-        updateUI();
-        updateBallProgress();
-        
-        if (gameState.strikes >= 3) {
-            gameState.outs++;
-            gameState.strikes = 0;
-            gameState.balls = 0;
-            gameState.batterNumber++;
-            updateGameStatus(`Strikeout! Hitter #${gameState.batterNumber} coming up.`);
-        } else if (gameState.balls >= 3) {  // Changed from 4 to 3
-            // After 3 balls, batter gets a free run - show as popup
-            gameState.runs += 1;
-            gameState.balls = 0;
-            gameState.strikes = 0;
-            gameState.batterNumber++;
-            
-            // Show the free run as an orange popup
-            showResult(`Batter #${gameState.batterNumber - 1}: Free run awarded, +1 run! `, 'ball');
-            
-            // Add visual feedback for free run
-            hideNewBatter();
-            setTimeout(() => showNewBatter(), 300);
-            
-            updateUI();
-            updateBallProgress();
-        }
-        
-        if (gameState.outs >= 3) {
-            gameState.inning++;
-            gameState.outs = 0;
-            gameState.batterNumber = 1;
-            clearBases();
-            updateGameStatus(`End of inning ${gameState.inning - 1}! Inning ${gameState.inning} - Hitter #1 up!`);
-        }
-        
-        setTimeout(() => {
-            resetForNextPitch();
-        }, 800);
-    }
-
-    function resetForNextPitch() {
+        elements.batterControls.style.display = 'block';
+        elements.strikeZone.style.display = 'none';
+        updateGameStatus(`RAGE MODE, activated`);
+    } else {
+        // Normal gameplay - return to pitching phase
         gameState.gamePhase = 'pitching';
-        gameState.selectedPitch = null;
-        gameState.selectedBatterAction = null;
-        
         elements.pitchControls.style.display = 'block';
         elements.batterControls.style.display = 'none';
         elements.strikeZone.style.display = 'none';
-        
-        // Reset button styles
-        document.querySelectorAll('.batter-option-btn').forEach(btn => {
-            btn.style.opacity = '1';
-            btn.style.transform = 'scale(1)';
-        });
-        
-        resetBallPosition();
         updateGameStatus(`Facing Hitter #${gameState.batterNumber}, Choose your pitch.`);
     }
+}
 
-    function resetBallPosition() {
-        const ball = elements.baseball;
-        ball.classList.remove('flying-single', 'flying-double', 'flying-homerun');
-        ball.style.transition = 'none';
-        ball.style.left = '50%';
-        ball.style.top = '30%';
-        ball.style.display = 'block';
-        ball.style.opacity = '1';
-        ball.style.transform = 'scale(1)';
-    }
 
-    function updateUI() {
-        elements.runs.textContent = gameState.runs;
-        elements.balls.textContent = gameState.balls;
-        elements.strikes.textContent = gameState.strikes;
-        elements.outs.textContent = gameState.outs;
-        elements.inningText.textContent = `INNING ${gameState.inning}`;
-        updateRunnerDisplay();
-    }
+     function resetBallPosition() {
+         const ball = elements.baseball;
+         ball.classList.remove('flying-single', 'flying-double', 'flying-homerun');
+         ball.style.transition = 'none';
+         ball.style.left = '48%';
+         ball.style.top = '52%';
+         ball.style.display = 'block';
+         ball.style.opacity = '1';
+         ball.style.transform = 'scale(1)';
+     }
 
-    function updateGameStatus(message) {
-        elements.gameStatus.textContent = message;
-    }
+     function updateUI() {
+         elements.runs.textContent = gameState.runs;
+         elements.balls.textContent = gameState.balls;
+         elements.strikes.textContent = gameState.strikes;
+         elements.outs.textContent = gameState.outs;
+         elements.inningText.textContent = `INNING ${gameState.inning}`;
+         updateRunnerDisplay();
+     }
 
-    document.addEventListener('keydown', (e) => {
-        if (gameState.gamePhase === 'batting') {
-            switch(e.key) {
-                case '0':
-                    selectBatterAction('leave');
-                    break;
-                case '1':
-                    selectBatterAction('bunt');
-                    break;
-                case '2':
-                    selectBatterAction('contact');
-                    break;
-                case '4':
-                    selectBatterAction('power');
-                    break;
-            }
-        }
-    });
+     function updateGameStatus(message) {
+         elements.gameStatus.textContent = message;
+     }
 
-    initGame();
-</script>
+     document.addEventListener('keydown', (e) => {
+         if (gameState.gamePhase === 'batting') {
+             switch(e.key) {
+                 case '0':
+                     selectBatterAction('leave');
+                     break;
+                 case '1':
+                     selectBatterAction('bunt');
+                     break;
+                 case '2':
+                     selectBatterAction('contact');
+                     break;
+                 case '4':
+                     selectBatterAction('power');
+                     break;
+             }
+         }
+     });
+
+     initGame();
+ </script>
 </body>
 </html>
