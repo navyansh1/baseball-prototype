@@ -11,6 +11,18 @@
             box-sizing: border-box;
             font-family: 'Arial Black', Arial, sans-serif;
         }
+        .field-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('pitch.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    z-index: 0;
+}
         
         body {
             background: linear-gradient(135deg, #2c5530, #4a7c59);
@@ -1024,6 +1036,7 @@
        </div>
        
        <div class="field-container">
+        <div class="field-background"></div>
            <div class="baseball-diamond">
                <div class="diamond-shape">
                    <div class="base home-plate"></div>
