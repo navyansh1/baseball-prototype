@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hitwicket x Baseball Prototype</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial Black', Arial, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #2c5530, #4a7c59);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            padding: 10px;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(135deg, #8FBC8F, #228B22);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            height: 90vh;
+            max-height: 700px;
+            min-height: 600px;
+            position: relative;
+        }
+        
+        .scoreboard {
+            background: linear-gradient(135deg, #1a472a, #2d5a2d);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 3px solid #FFD700;
+            flex-shrink: 0;
+            position: relative;
+        }
+        
+        .score-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        
+        .score-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .score-label {
+            font-size: 0.7rem;
+            color: #cccccc;
+        }
+        
+        .score-value {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #FFD700;
+        }
+        
+        .inning-display {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+        
+        .field-container {
+            position: relative;
+            flex: 1;
+            background: radial-gradient(ellipse at center, #90EE90, #228B22);
+            overflow: hidden;
+            min-height: 250px;
+        }
+        
+        .baseball-diamond {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 160px;
+            height: 160px;
+        }
+        
+        .diamond-shape {
+            width: 100%;
+            height: 100%;
+            transform: rotate(45deg);
+            border: 3px solid white;
+            background: rgba(139, 69, 19, 0.3);
+            position: relative;
+        }
+        
+        .base {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: white;
+            border: 2px solid #8B4513;
+            border-radius: 2px;
+        }
+        
+        .home-plate { 
+            bottom: -28px; 
+            right: -28px; 
+            transform: rotate(-45deg);
+        }
+        .third-base { 
+            bottom: -6px; 
+            right: +149px; 
+            transform: rotate(-45deg);
+        }
+        .first-base { 
+            top: -7px; 
+            right: -7px; 
+            transform: rotate(-45deg);
+        }
+        .second-base { 
+            top: -7px; 
+            left: -7px; 
+            transform: rotate(-45deg);
+        }
+        
+        .runner-dot {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle, #FFD700, #FFA500);
+            border: 2px solid #FF6B35;
+            border-radius: 50%;
+            display: none;
+            z-index: 15;
+            transform: rotate(-45deg);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            transition: all 0.5s ease-out;
+        }
+        
+        #runner-1 {
+            top: -14px;
+            right: -14px;
+        }
+        
+        #runner-2 {
+            top: -14px;
+            left: -14px;
+        }
+        
+        #runner-3 {
+            bottom: -1px;
+            right: 142px;
+        }
+        
+        .new-batter-dot {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: radial-gradient(circle, #32CD32, #228B22) !important;
+            border: 3px solid #006400 !important;
+            border-radius: 50%;
+            z-index: 16;
+            transform: rotate(-45deg);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.4);
+            display: block !important;
+            opacity: 1 !important;
+            bottom: 10px;
+            right: 10px;
+            transition: all 0.5s ease-out;
+        }
+        
+        .new-batter-appear {
+            animation: newBatterBounce 1s ease-out forwards;
+        }
+
+        @keyframes newBatterBounce {
+            0% { 
+                transform: rotate(-45deg) scale(0.3);
+                opacity: 0;
+            }
+            50% { 
+                transform: rotate(-45deg) scale(1.2);
+                opacity: 0.8;
+            }
+            100% { 
+                transform: rotate(-45deg) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .moving {
+            transform: rotate(-45deg) scale(1.3);
+            opacity: 0.6;
+        }
+        
+        .pitcher-mound {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotate(-45deg);
+            width: 16px;
+            height: 16px;
+            background: radial-gradient(circle, #8B4513, #A0522D);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+        
+        .batter-box {
+            position: absolute;
+            bottom: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 30px;
+            border: 2px solid white;
+            background: rgba(139, 69, 19, 0.4);
+        }
+        
+        .batter {
+            position: absolute;
+            bottom: 22%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 25px;
+            height: 40px;
+            z-index: 10;
+        }
+        
+        .batter-body {
+            width: 14px;
+            height: 28px;
+            background: #FF6B35;
+            border-radius: 7px;
+            margin: 0 auto;
+            position: relative;
+        }
+        
+        .batter-head {
+            width: 16px;
+            height: 16px;
+            background: #F4C2A1;
+            border-radius: 50%;
+            margin: 0 auto 3px;
+        }
+        
+        .bat {
+            position: absolute;
+            width: 3px;
+            height: 28px;
+            background: linear-gradient(to bottom, #8B4513, #A0522D);
+            border-radius: 2px;
+            right: -6px;
+            top: 8px;
+            transform-origin: bottom center;
+            transition: transform 0.2s ease;
+        }
+        
+        .bat.swinging {
+            transform: rotate(-45deg);
+        }
+        
+        .pitcher {
+            position: absolute;
+            top: 30%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 22px;
+            height: 35px;
+            z-index: 5;
+        }
+        
+        .pitcher-body {
+            width: 12px;
+            height: 22px;
+            background: #4169E1;
+            border-radius: 6px;
+            margin: 0 auto;
+        }
+        
+        .pitcher-head {
+            width: 14px;
+            height: 14px;
+            background: #F4C2A1;
+            border-radius: 50%;
+            margin: 0 auto 3px;
+        }
+        
+        .baseball {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            border: 2px solid #FF0000;
+            z-index: 20;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        .baseball::before,
+        .baseball::after {
+            content: '';
+            position: absolute;
+            width: 1px;
+            height: 8px;
+            background: #FF0000;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        .baseball::before {
+            transform: translate(-50%, -50%) rotate(15deg);
+        }
+        
+        .baseball::after {
+            transform: translate(-50%, -50%) rotate(-15deg);
+        }
+        
+        .baseball.flying-single {
+            animation: flySingle 2s ease-out forwards;
+        }
+        
+        .baseball.flying-double {
+            animation: flyDouble 2.5s ease-out forwards;
+        }
+        
+        .baseball.flying-homerun {
+            animation: flyHomerun 3s ease-out forwards;
+        }
+        
+        @keyframes flySingle {
+            0% { 
+                left: 50%; 
+                top: 70%; 
+                transform: scale(1);
+            }
+            50% { 
+                left: 75%; 
+                top: 40%; 
+                transform: scale(0.8);
+            }
+            100% { 
+                left: 82%; 
+                top: 55%; 
+                transform: scale(0.7);
+                opacity: 0.8;
+            }
+        }
+        
+        @keyframes flyDouble {
+            0% { 
+                left: 50%; 
+                top: 70%; 
+                transform: scale(1);
+            }
+            30% { 
+                left: 70%; 
+                top: 25%; 
+                transform: scale(0.9);
+            }
+            70% { 
+                left: 88%; 
+                top: 20%; 
+                transform: scale(0.8);
+            }
+            100% { 
+                left: 92%; 
+                top: 45%; 
+                transform: scale(0.6);
+                opacity: 0.7;
+            }
+        }
+        
+        @keyframes flyHomerun {
+            0% { 
+                left: 50%; 
+                top: 70%; 
+                transform: scale(1);
+            }
+            15% { 
+                left: 65%; 
+                top: 10%; 
+                transform: scale(1.2);
+            }
+            35% { 
+                left: 85%; 
+                top: 2%; 
+                transform: scale(1.0);
+            }
+            60% { 
+                left: 105%; 
+                top: 1%; 
+                transform: scale(0.6);
+            }
+            85% { 
+                left: 120%; 
+                top: 5%; 
+                transform: scale(0.3);
+            }
+            100% { 
+                left: 130%; 
+                top: 8%; 
+                transform: scale(0.1);
+                opacity: 0;
+            }
+        }
+        
+        .timing-zone {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 180px;
+            height: 35px;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 18px;
+            border: 2px solid white;
+            overflow: hidden;
+            display: none;
+        }
+        
+        .timing-indicator {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 18px;
+            height: 100%;
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+            border-radius: 9px;
+            transition: left 1.5s linear;
+            box-shadow: 0 0 8px rgba(255, 215, 0, 0.8);
+        }
+        
+        .sweet-spot {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 35px;
+            height: 25px;
+            background: rgba(0, 255, 0, 0.3);
+            border: 2px solid #00FF00;
+            border-radius: 12px;
+        }
+        
+        .game-status {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 8px;
+            text-align: center;
+            font-size: 0.9rem;
+            font-weight: bold;
+            min-height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .controls {
+            padding: 8px 12px;
+            background: linear-gradient(135deg, #1a1a1a, #333333);
+            min-height: 140px;
+            flex-shrink: 0;
+        }
+        
+        .button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 6px;
+            transition: all 0.2s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .pitch-button {
+            background: linear-gradient(135deg, #FF6B35, #F7931E);
+            color: white;
+            box-shadow: 0 3px 12px rgba(255, 107, 53, 0.4);
+        }
+        
+        .pitch-button:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.6);
+        }
+        
+        .batter-options {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+        
+        .batter-option-container {
+            flex: 1;
+            position: relative;
+        }
+        
+        .batter-option-percentage {
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            text-align: center;
+            margin-bottom: 0px;
+            margin-top: 0px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+            line-height: 1;
+        }
+        
+        .batter-option-btn {
+            width: 100%;
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.55rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 75px;
+            padding: 4px;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #2196F3, #1976D2);
+        }
+        
+        .batter-option-progress {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            right: 2px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+        
+        .batter-option-progress-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        
+        .batter-option-name {
+            font-size: 0.55rem;
+            margin-top: 5px;
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .batter-option-digit {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+            line-height: 1;
+            margin-top: 2px;
+        }
+        
+        .leave-btn .batter-option-progress-fill {
+            background: linear-gradient(90deg, #66BB6A, #81C784);
+            width: 80%;
+        }
+        
+        .bunt-btn .batter-option-progress-fill {
+            background: linear-gradient(90deg, #FFB74D, #FFCC02);
+            width: 60%;
+        }
+        
+        .contact-btn .batter-option-progress-fill {
+            background: linear-gradient(90deg, #FF9800, #FF6F00);
+            width: 50%;
+        }
+        
+        .power-btn .batter-option-progress-fill {
+            background: linear-gradient(90deg, #EF5350, #E57373);
+            width: 40%;
+        }
+        
+        .button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+        
+        .pitch-types {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .pitch-type-btn {
+            flex: 1;
+            aspect-ratio: 1;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 60px;
+            padding: 4px;
+        }
+        
+        .pitch-img {
+            width: 20px;
+            height: 20px;
+            margin-bottom: 4px;
+        }
+        
+        .outside {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+        }
+        
+        .fastball {
+            background: linear-gradient(135deg, #FFD700, #FFA500);
+            color: black;
+        }
+        
+        .curveball {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+        }
+        
+        .sinker {
+            background: linear-gradient(135deg, #F44336, #D32F2F);
+        }
+        
+        .outside .pitch-img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .fastball .pitch-img {
+            filter: brightness(0);
+        }
+        
+        .curveball .pitch-img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .sinker .pitch-img {
+            filter: brightness(0) invert(1);
+        }
+        
+        .result-popup {
+            position: absolute;
+            top: 65%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.95);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 6px;
+            text-align: center;
+            font-size: 0.85rem;
+            font-weight: bold;
+            z-index: 100;
+            display: none;
+            border: 2px solid #FFD700;
+            max-width: 90%;
+            margin-top: 0px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .homerun-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.3), transparent);
+            animation: homerun-flash 1s ease-out;
+            pointer-events: none;
+            z-index: 50;
+        }
+        
+        @keyframes homerun-flash {
+            0% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 1; transform: scale(1.2); }
+            100% { opacity: 0; transform: scale(1); }
+        }
+        
+        .strike-zone {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 70px;
+            height: 50px;
+            border: 2px dashed rgba(255, 255, 255, 0.5);
+            display: none;
+        }
+
+        @media (max-height: 700px) {
+            .game-container {
+                height: 95vh;
+                max-height: none;  
+            }
+            
+            .controls {
+                min-height: 120px;
+                padding: 10px;
+            }
+            
+            .button {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+            
+            .pitch-type-btn {
+                min-height: 50px;
+                font-size: 0.65rem;
+            }
+            
+            .batter-option-btn {
+                min-height: 65px;
+                font-size: 0.5rem;
+            }
+            
+            .pitch-img {
+                width: 16px;
+                height: 16px;
+            }
+            
+            .batter-option-digit {
+                font-size: 2rem;
+            }
+            
+            .batter-option-percentage {
+                font-size: 0.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="scoreboard">
+            <div class="score-row">
+                <div class="score-item">
+                    <span class="score-label">RUNS</span>
+                    <span class="score-value" id="runs">0</span>
+                </div>
+                <div class="inning-display">
+                    <span id="inning-text">INNING 1</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">BALLS</span>
+                    <span class="score-value" id="balls">0</span>
+                </div>
+            </div>
+            <div class="score-row">
+                <div class="score-item">
+                    <span class="score-label">STRIKES</span>
+                    <span class="score-value" id="strikes">0</span>
+                </div>
+                <div class="score-item">
+                    <span class="score-label">OUTS</span>
+                    <span class="score-value" id="outs">0</span>
+                </div>
+            </div>
+            
+            <div class="result-popup" id="result-popup"></div>
+        </div>
+        
+        <div class="field-container">
+            <div class="baseball-diamond">
+                <div class="diamond-shape">
+                    <div class="base home-plate"></div>
+                    <div class="base first-base"></div>
+                    <div class="base second-base"></div>
+                    <div class="base third-base"></div>
+                    <div class="pitcher-mound"></div>
+                    
+                    <div class="runner-dot" id="runner-1"></div>
+                    <div class="runner-dot" id="runner-2"></div>
+                    <div class="runner-dot" id="runner-3"></div>
+                    
+                    <div class="new-batter-dot" id="new-batter"></div>
+                </div>
+            </div>
+            
+            <div class="batter-box"></div>
+            <div class="strike-zone" id="strike-zone"></div>
+            
+            <div class="batter" id="batter">
+                <div class="batter-head"></div>
+                <div class="batter-body">
+                    <div class="bat" id="bat"></div>
+                </div>
+            </div>
+            
+            <div class="pitcher" id="pitcher">
+                <div class="pitcher-head"></div>
+                <div class="pitcher-body"></div>
+            </div>
+            
+            <div class="baseball" id="baseball"></div>
+            
+            <div class="timing-zone" id="timing-zone">
+                <div class="sweet-spot"></div>
+                <div class="timing-indicator" id="timing-indicator"></div>
+            </div>
+        </div>
+        
+        <div class="game-status" id="game-status">
+            Welcome to Baseball! Choose your pitch type to throw.
+        </div>
+        
+        <div class="controls">
+            <div id="pitch-controls">
+                <div class="pitch-types">
+                    <button class="pitch-type-btn outside" onclick="throwPitch('outside')">
+                        <img src="ball.png" alt="Ball" class="pitch-img">
+                        OUTSIDE
+                    </button>
+                    <button class="pitch-type-btn fastball" onclick="throwPitch('fastball')">
+                        <img src="ball.png" alt="Ball" class="pitch-img">
+                        FASTBALL
+                    </button>
+                    <button class="pitch-type-btn curveball" onclick="throwPitch('curveball')">
+                        <img src="ball.png" alt="Ball" class="pitch-img">
+                        CURVEBALL
+                    </button>
+                    <button class="pitch-type-btn sinker" onclick="throwPitch('sinker')">
+                        <img src="ball.png" alt="Ball" class="pitch-img">
+                        SINKER
+                    </button>
+                </div>
+            </div>
+            
+            <div id="batter-controls" style="display: none;">
+                <div class="batter-options">
+                    <div class="batter-option-container">
+                        <div class="batter-option-percentage">80%</div>
+                        <button class="batter-option-btn leave-btn" onclick="selectBatterAction('leave')">
+                            <div class="batter-option-progress">
+                                <div class="batter-option-progress-fill"></div>
+                            </div>
+                            <div class="batter-option-digit">0</div>
+                            <span class="batter-option-name">LEAVE</span>
+                        </button>
+                    </div>
+                    <div class="batter-option-container">
+                        <div class="batter-option-percentage">60%</div>
+                        <button class="batter-option-btn bunt-btn" onclick="selectBatterAction('bunt')">
+                           <div class="batter-option-progress">
+                               <div class="batter-option-progress-fill"></div>
+                           </div>
+                           <div class="batter-option-digit">1</div>
+                           <span class="batter-option-name">BUNT</span>
+                       </button>
+                    </div>
+                    <div class="batter-option-container">
+                        <div class="batter-option-percentage">50%</div>
+                        <button class="batter-option-btn contact-btn" onclick="selectBatterAction('contact')">
+                           <div class="batter-option-progress">
+                               <div class="batter-option-progress-fill"></div>
+                           </div>
+                           <div class="batter-option-digit">2</div>
+                           <span class="batter-option-name">CONTACT</span>
+                       </button>
+                    </div>
+                    <div class="batter-option-container">
+                        <div class="batter-option-percentage">40%</div>
+                        <button class="batter-option-btn power-btn" onclick="selectBatterAction('power')">
+                           <div class="batter-option-progress">
+                               <div class="batter-option-progress-fill"></div>
+                           </div>
+                           <div class="batter-option-digit">4</div>
+                           <span class="batter-option-name">HOMERUN</span>
+                       </button>
+                    </div>
+               </div>
+           </div>
+       </div>
+   </div>
+
+   <script>
+       const gameState = {
+           runs: 0,
+           balls: 0,
+           strikes: 0,
+           outs: 0,
+           inning: 1,
+           selectedPitch: null,
+           selectedBatterAction: null,
+           gamePhase: 'pitching',
+           batterNumber: 1,
+       };
+
+       const baseRunners = [false, false, false];
+
+       const pitchTypes = {
+           outside: { name: 'Outside', isStrike: false },
+           fastball: { name: 'Fastball', isStrike: true },
+           curveball: { name: 'Curveball', isStrike: true },
+           sinker: { name: 'Sinker', isStrike: true }
+       };
+
+       const batterActions = {
+           leave: { 
+               name: 'Leave', 
+               successChance: 0.80,
+               runs: 0,
+               catchChance: 0.10,
+               strikeChance: 0.10
+           },
+           bunt: { 
+               name: 'Bunt', 
+               successChance: 0.60,
+               runs: 1,
+               catchChance: 0.15,
+               strikeChance: 0.25
+           },
+           contact: { 
+               name: 'Contact', 
+               successChance: 0.50,
+               runs: 2,
+               catchChance: 0.25,
+               strikeChance: 0.25
+           },
+           power: { 
+               name: 'Power', 
+               successChance: 0.40,
+               runs: 4,
+               catchChance: 0.30,
+               strikeChance: 0.30
+           }
+       };
+
+       const elements = {
+          runs: document.getElementById('runs'),
+          balls: document.getElementById('balls'),
+          strikes: document.getElementById('strikes'),
+          outs: document.getElementById('outs'),
+          inningText: document.getElementById('inning-text'),
+          gameStatus: document.getElementById('game-status'),
+          baseball: document.getElementById('baseball'),
+          batter: document.getElementById('batter'),
+          bat: document.getElementById('bat'),
+         pitcher: document.getElementById('pitcher'),
+         timingZone: document.getElementById('timing-zone'),
+         strikeZone: document.getElementById('strike-zone'),
+         pitchControls: document.getElementById('pitch-controls'),
+         batterControls: document.getElementById('batter-controls'),
+         resultPopup: document.getElementById('result-popup'),
+         runner1: document.getElementById('runner-1'),
+         runner2: document.getElementById('runner-2'),
+         runner3: document.getElementById('runner-3'),
+         newBatter: document.getElementById('new-batter')
+     };
+
+     function initGame() {
+         resetBallPosition();
+         updateUI();
+         updateRunnerDisplay();
+         showNewBatter();
+         updateGameStatus(`Facing Hitter #${gameState.batterNumber}, Choose your pitch`);
+     }
+
+     function showNewBatter() {
+         elements.newBatter.style.display = 'block';
+         elements.newBatter.style.opacity = '1';
+         elements.newBatter.classList.add('new-batter-appear');
+         setTimeout(() => {
+             elements.newBatter.classList.remove('new-batter-appear');
+         }, 1000);
+     }
+
+     function hideNewBatter() {
+         elements.newBatter.style.display = 'none';
+         elements.newBatter.style.opacity = '0';
+     }
+
+     function updateBaseRunners(runs) {
+         let runsScored = 0;
+         
+         // Hide the green batter immediately
+         hideNewBatter();
+         
+         // Add visual effect to show movement
+         document.querySelectorAll('.runner-dot').forEach(dot => {
+             dot.classList.add('moving');
+         });
+         
+         // Calculate runs scored and update bases
+         switch (runs) {
+             case 1: // Single
+                 if (baseRunners[2]) runsScored++;
+                 baseRunners[2] = baseRunners[1];
+                 baseRunners[1] = baseRunners[0];
+                 baseRunners[0] = true;
+                 break;
+                 
+             case 2: // Double  
+                 if (baseRunners[1]) runsScored++;
+                 if (baseRunners[2]) runsScored++;
+                 baseRunners[2] = baseRunners[0];
+                 baseRunners[1] = true;
+                 baseRunners[0] = false;
+                 break;
+                 
+             case 4: // Homerun
+                 runsScored = 1;
+                 if (baseRunners[0]) runsScored++;
+                 if (baseRunners[1]) runsScored++;
+                 if (baseRunners[2]) runsScored++;
+                 baseRunners[0] = false;
+                 baseRunners[1] = false;
+                 baseRunners[2] = false;
+                 break;
+         }
+         
+         gameState.runs += runsScored;
+         gameState.batterNumber++;
+         
+         // Update display after short animation
+         setTimeout(() => {
+             document.querySelectorAll('.runner-dot').forEach(dot => {
+                 dot.classList.remove('moving');
+             });
+             updateRunnerDisplay();
+             updateUI();
+             showNewBatter();
+         }, 800);
+         
+         return runsScored;
+     }
+
+     function updateRunnerDisplay() {
+         elements.runner1.style.display = baseRunners[0] ? 'block' : 'none';
+         elements.runner2.style.display = baseRunners[1] ? 'block' : 'none';
+         elements.runner3.style.display = baseRunners[2] ? 'block' : 'none';
+     }
+
+     function clearBases() {
+         baseRunners[0] = false;
+         baseRunners[1] = false;
+         baseRunners[2] = false;
+         updateRunnerDisplay();
+         hideNewBatter();
+         setTimeout(() => {
+             showNewBatter();
+         }, 300);
+     }
+
+     function throwPitch(pitchType) {
+         gameState.selectedPitch = pitchType;
+         gameState.gamePhase = 'batting';
+         
+         elements.pitchControls.style.display = 'none';
+         elements.strikeZone.style.display = 'block';
+         
+         animatePitch(pitchTypes[pitchType]);
+         updateGameStatus(`Hitter #${gameState.batterNumber}: Choose your shot`);
+         setTimeout(() => {
+             elements.batterControls.style.display = 'block';
+         }, 1200);
+     }
+
+     function selectBatterAction(action) {
+         gameState.selectedBatterAction = action;
+         
+         document.querySelectorAll('.batter-option-btn').forEach(btn => {
+             btn.style.opacity = '0.6';
+             btn.style.transform = 'scale(0.95)';
+         });
+         
+         event.target.style.opacity = '1';
+         event.target.style.transform = 'scale(1.05)';
+         
+         setTimeout(() => {
+             resolveBatterAction();
+         }, 500);
+     }
+
+     function resolveBatterAction() {
+         const pitch = pitchTypes[gameState.selectedPitch];
+         const batterAction = batterActions[gameState.selectedBatterAction];
+         
+         let result = '';
+         let message = '';
+         let runsScored = 0;
+         
+         if (gameState.selectedBatterAction === 'leave') {
+             if (pitch.isStrike) {
+                 result = 'strike';
+                 message = `Batter #${gameState.batterNumber}: That's a strike! ❌`;
+                 gameState.strikes++;
+             } else {
+                 result = 'ball';
+                 message = `Batter #${gameState.batterNumber}: Good. That's a ball. ✅`;
+                 gameState.balls++;
+             }
+         } else {
+             const roll = Math.random();
+             
+             if (roll < batterAction.successChance) {
+                 result = 'success';
+                 runsScored = updateBaseRunners(batterAction.runs);
+                 
+                 let actionName = '';
+                 
+                 switch (gameState.selectedBatterAction) {
+                     case 'bunt':
+                         actionName = 'Successful bunt!';
+                         animateBallFlight('single');
+                         break;
+                     case 'contact':
+                         actionName = 'Double scored!';
+                         animateBallFlight('double');
+                         break;
+                     case 'power':
+                         actionName = 'HOME RUN!';
+                         animateBallFlight('homerun');
+                         showHomerunEffect();
+                         break;
+                 }
+                 
+                 if (gameState.selectedBatterAction === 'power') {
+                     message = `Batter #${gameState.batterNumber - 1}: ${actionName} +${runsScored} run${runsScored !== 1 ? 's' : ''}!`;
+                 } else {
+                     message = `Batter #${gameState.batterNumber - 1}: ${actionName}${runsScored > 0 ? ` +${runsScored} run${runsScored !== 1 ? 's' : ''}!` : ''}`;
+                 }
+             } else {
+                 const failureRoll = Math.random();
+                 const totalFailure = batterAction.catchChance + batterAction.strikeChance;
+                 const catchThreshold = batterAction.catchChance / totalFailure;
+                 
+                 if (failureRoll < catchThreshold) {
+                     result = 'catch';
+                     message = `Batter #${gameState.batterNumber}: Ball caught, OUT`;
+                     gameState.outs++;
+                     gameState.batterNumber++;
+                 } else {
+                     result = 'strike';
+                     message = `Batter #${gameState.batterNumber}: STRIKE!`;
+                     gameState.strikes++;
+                 }
+             }
+         }
+         
+         if (gameState.selectedBatterAction !== 'leave') {
+             elements.bat.classList.add('swinging');
+             elements.batter.style.transform = 'translateX(-50%) scale(1.1)';
+             
+             setTimeout(() => {
+                 elements.bat.classList.remove('swinging');
+                 elements.batter.style.transform = 'translateX(-50%) scale(1)';
+             }, 300);
+         }
+         
+         showResult(message, result);
+         
+         setTimeout(() => {
+             checkGameState();
+         }, 500);
+     }
+
+     function animateBallFlight(type) {
+         const ball = elements.baseball;
+         ball.classList.remove('flying-single', 'flying-double', 'flying-homerun');
+         
+         setTimeout(() => {
+             ball.classList.add(`flying-${type}`);
+         }, 100);
+     }
+
+     function animatePitch(pitch) {
+         const ball = elements.baseball;
+         
+         ball.style.left = '50%';
+         ball.style.top = '30%';
+         ball.style.display = 'block';
+         
+         setTimeout(() => {
+             ball.style.transition = 'all 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+             
+             if (gameState.selectedPitch === 'outside') {
+                 ball.style.left = '70%';
+                 ball.style.top = '70%';
+             } else if (gameState.selectedPitch === 'curveball') {
+                 ball.style.left = '45%';
+                 ball.style.top = '73%';
+             } else if (gameState.selectedPitch === 'sinker') {
+                 ball.style.left = '50%';
+                 ball.style.top = '77%';
+             } else {
+                 ball.style.left = '50%';
+                 ball.style.top = '70%';
+             }
+         }, 100);
+     }
+
+     function showResult(message, type) {
+         elements.resultPopup.textContent = message;
+         elements.resultPopup.style.display = 'block';
+         
+         if (type === 'success') {
+             elements.resultPopup.style.borderColor = '#4CAF50';
+             elements.resultPopup.style.color = '#4CAF50';
+         } else if (type === 'ball') {
+             elements.resultPopup.style.borderColor = '#FFD700';
+             elements.resultPopup.style.color = '#FFD700';
+         } else {
+             elements.resultPopup.style.borderColor = '#FF6B35';
+             elements.resultPopup.style.color = '#FF6B35';
+         }
+         
+         setTimeout(() => {
+             elements.resultPopup.style.display = 'none';
+         }, 2500);
+     }
+
+     function showHomerunEffect() {
+         const effect = document.createElement('div');
+         effect.className = 'homerun-effect';
+         document.querySelector('.field-container').appendChild(effect);
+         
+         setTimeout(() => {
+             effect.remove();
+         }, 1000);
+     }
+
+     function checkGameState() {
+         updateUI();
+         
+         if (gameState.strikes >= 3) {
+             gameState.outs++;
+             gameState.strikes = 0;
+             gameState.balls = 0;
+             gameState.batterNumber++;
+             updateGameStatus(`Strikeout! Hitter #${gameState.batterNumber} coming up.`);
+         } else if (gameState.balls >= 4) {
+             let runsScored = 0;
+             if (baseRunners[2]) runsScored++;
+             if (baseRunners[1]) baseRunners[2] = true;
+             if (baseRunners[0]) baseRunners[1] = true;
+             baseRunners[0] = true;
+             
+             gameState.runs += runsScored;
+             gameState.balls = 0;
+             gameState.strikes = 0;
+             gameState.batterNumber++;
+             updateRunnerDisplay();
+             updateUI();
+             hideNewBatter();
+             setTimeout(() => showNewBatter(), 300);
+             updateGameStatus(`Walk, Hitter #${gameState.batterNumber} coming up.${runsScored > 0 ? ` ${runsScored} run(s) scored!` : ''}`);
+         }
+         
+         if (gameState.outs >= 3) {
+             gameState.inning++;
+             gameState.outs = 0;
+             gameState.batterNumber = 1;
+             clearBases();
+             updateGameStatus(`End of inning ${gameState.inning - 1}! Inning ${gameState.inning} - Hitter #1 up!`);
+         }
+         
+         setTimeout(() => {
+             resetForNextPitch();
+         }, 800);
+     }
+
+     function resetForNextPitch() {
+         gameState.gamePhase = 'pitching';
+         gameState.selectedPitch = null;
+         gameState.selectedBatterAction = null;
+         
+         elements.pitchControls.style.display = 'block';
+         elements.batterControls.style.display = 'none';
+         elements.strikeZone.style.display = 'none';
+         
+         document.querySelectorAll('.batter-option-btn').forEach(btn => {
+             btn.style.opacity = '1';
+             btn.style.transform = 'scale(1)';
+         });
+         
+         resetBallPosition();
+         updateGameStatus(`Facing Hitter #${gameState.batterNumber}, Choose your pitch.`);
+     }
+
+     function resetBallPosition() {
+         const ball = elements.baseball;
+         ball.classList.remove('flying-single', 'flying-double', 'flying-homerun');
+         ball.style.transition = 'none';
+         ball.style.left = '50%';
+         ball.style.top = '30%';
+         ball.style.display = 'block';
+         ball.style.opacity = '1';
+         ball.style.transform = 'scale(1)';
+     }
+
+     function updateUI() {
+         elements.runs.textContent = gameState.runs;
+         elements.balls.textContent = gameState.balls;
+         elements.strikes.textContent = gameState.strikes;
+         elements.outs.textContent = gameState.outs;
+         elements.inningText.textContent = `INNING ${gameState.inning}`;
+         updateRunnerDisplay();
+     }
+
+     function updateGameStatus(message) {
+         elements.gameStatus.textContent = message;
+     }
+
+     document.addEventListener('keydown', (e) => {
+         if (gameState.gamePhase === 'batting') {
+             switch(e.key) {
+                 case '0':
+                     selectBatterAction('leave');
+                     break;
+                 case '1':
+                     selectBatterAction('bunt');
+                     break;
+                 case '2':
+                     selectBatterAction('contact');
+                     break;
+                 case '4':
+                     selectBatterAction('power');
+                     break;
+             }
+         }
+     });
+
+     initGame();
+ </script>
+</body>
+</html>
