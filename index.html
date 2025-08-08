@@ -55,7 +55,6 @@
             color: white;
             padding: 8px;
             text-align: center;
-            border-bottom: 3px solid #FFD700;
             flex-shrink: 0;
             position: relative;
             font-family: 'Courier New', monospace;
@@ -65,9 +64,9 @@
             display: flex;
             justify-content: space-around;
             margin-bottom: 8px;
-            font-size: 0.7rem;
+            font-size: 0.9rem;
             background: rgba(0, 0, 0, 0.3);
-            padding: 4px;
+            padding: 6px;
             border-radius: 5px;
         }
         
@@ -78,16 +77,16 @@
         }
         
         .status-label {
-            font-size: 0.6rem;
+            font-size: 0.75rem;
             color: #cccccc;
             font-weight: bold;
         }
         
         .status-value {
-            font-size: 1rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: #FFD700;
-            margin-top: 2px;
+            margin-top: 3px;
         }
         
         .inning-scoreboard {
@@ -95,52 +94,52 @@
             border: 2px solid #fff;
             border-radius: 5px;
             overflow: hidden;
-            font-size: 0.5rem;
+            font-size: 0.65rem;
             font-weight: bold;
         }
         
         .scoreboard-header {
             display: grid;
-            grid-template-columns: 60px repeat(9, 1fr) 30px 30px 30px;
+            grid-template-columns: 60px repeat(4, 1fr) 30px;
             background: #333;
             border-bottom: 1px solid #fff;
         }
         
         .scoreboard-header div {
-            padding: 3px 2px;
+            padding: 4px 3px;
             text-align: center;
             border-right: 1px solid #666;
             color: white;
-            font-size: 0.45rem;
+            font-size: 0.6rem;
         }
         
         .team-row {
             display: grid;
-            grid-template-columns: 60px repeat(9, 1fr) 30px 30px 30px;
+            grid-template-columns: 60px repeat(4, 1fr) 30px;
             border-bottom: 1px solid #666;
         }
         
         .team-name {
-            padding: 4px;
+            padding: 6px;
             text-align: left;
             border-right: 1px solid #666;
             background: #444;
             color: #FFD700;
             font-weight: bold;
-            font-size: 0.45rem;
+            font-size: 0.6rem;
         }
         
         .inning-score, .total-score {
-            padding: 4px 2px;
+            padding: 6px 3px;
             text-align: center;
             border-right: 1px solid #666;
             background: #222;
             color: white;
-            min-height: 20px;
+            min-height: 26px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.5rem;
+            font-size: 0.65rem;
         }
         
         .current-inning {
@@ -940,24 +939,38 @@
                 top: 4px;
             }
 
+            .current-status {
+                font-size: 0.8rem;
+                padding: 5px;
+            }
+
+            .status-label {
+                font-size: 0.65rem;
+            }
+
+            .status-value {
+                font-size: 1.1rem;
+                margin-top: 2px;
+            }
+
             .inning-scoreboard {
-                font-size: 0.4rem;
+                font-size: 0.5rem;
             }
 
             .scoreboard-header div {
-                font-size: 0.35rem;
-                padding: 2px 1px;
-            }
-
-            .team-name {
-                font-size: 0.35rem;
+                font-size: 0.45rem;
                 padding: 3px 2px;
             }
 
+            .team-name {
+                font-size: 0.45rem;
+                padding: 4px 3px;
+            }
+
             .inning-score, .total-score {
-                font-size: 0.4rem;
-                padding: 3px 1px;
-                min-height: 16px;
+                font-size: 0.5rem;
+                padding: 4px 2px;
+                min-height: 20px;
             }
         }
     </style>
@@ -987,18 +1000,11 @@
             <div class="inning-scoreboard">
                 <div class="scoreboard-header">
                     <div>INNING</div>
-                    <div>1</div>
-                    <div>2</div>
-                    <div>3</div>
-                    <div>4</div>
-                    <div>5</div>
-                    <div>6</div>
-                    <div>7</div>
-                    <div>8</div>
-                    <div>9</div>
+                    <div id="header-1">1</div>
+                    <div id="header-2">2</div>
+                    <div id="header-3">3</div>
+                    <div id="header-4">4</div>
                     <div>R</div>
-                    <div>H</div>
-                    <div>E</div>
                 </div>
                 <div class="team-row">
                     <div class="team-name">VISITOR</div>
@@ -1006,14 +1012,7 @@
                     <div class="inning-score" id="visitor-2">0</div>
                     <div class="inning-score" id="visitor-3">0</div>
                     <div class="inning-score" id="visitor-4">0</div>
-                    <div class="inning-score" id="visitor-5">0</div>
-                    <div class="inning-score" id="visitor-6">0</div>
-                    <div class="inning-score" id="visitor-7">0</div>
-                    <div class="inning-score" id="visitor-8">0</div>
-                   <div class="inning-score" id="visitor-9">0</div>
-                   <div class="total-score" id="visitor-runs">0</div>
-                   <div class="total-score" id="visitor-hits">0</div>
-                   <div class="total-score" id="visitor-errors">0</div>
+                    <div class="total-score" id="visitor-runs">0</div>
                </div>
                <div class="team-row">
                    <div class="team-name">HOME</div>
@@ -1021,14 +1020,7 @@
                    <div class="inning-score" id="home-2">0</div>
                    <div class="inning-score" id="home-3">0</div>
                    <div class="inning-score" id="home-4">0</div>
-                   <div class="inning-score" id="home-5">0</div>
-                   <div class="inning-score" id="home-6">0</div>
-                   <div class="inning-score" id="home-7">0</div>
-                   <div class="inning-score" id="home-8">0</div>
-                   <div class="inning-score" id="home-9">0</div>
                    <div class="total-score" id="home-runs">0</div>
-                   <div class="total-score" id="home-hits">0</div>
-                   <div class="total-score" id="home-errors">0</div>
                </div>
            </div>
            
@@ -1186,9 +1178,9 @@
         rageMode: false,
         rageUsed: false,
         leaves: 0,
-        inningScores: [0, 0, 0, 0, 0, 0, 0, 0, 0], // Runs per inning
-        visitorScores: [0, 0, 0, 0, 0, 0, 0, 0, 0], // Visitor runs per inning (for display)
-        homeScores: [0, 0, 0, 0, 0, 0, 0, 0, 0] // Home runs per inning (for display)
+        inningScores: [0, 0, 0, 0], // Runs per inning
+        visitorScores: [0, 0, 0, 0], // Visitor runs per inning (for display)
+        homeScores: [0, 0, 0, 0] // Home runs per inning (for display)
     };
 
     const baseRunners = [false, false, false];
@@ -1203,31 +1195,55 @@
     const batterActions = {
         leave: { 
             name: 'Leave', 
-            successChance: 0.80,
             runs: 0,
             catchChance: 0.10,
             strikeChance: 0.10
         },
         bunt: { 
             name: 'Bunt', 
-            successChance: 0.60,
             runs: 1,
             catchChance: 0.15,
             strikeChance: 0.25
         },
         contact: { 
             name: 'Contact', 
-            successChance: 0.50,
             runs: 2,
             catchChance: 0.25,
             strikeChance: 0.25
         },
         power: { 
             name: 'Power', 
-            successChance: 0.40,
             runs: 4,
             catchChance: 0.30,
             strikeChance: 0.30
+        }
+    };
+
+    // Pitch-specific success rates for each batter action
+    const pitchSuccessRates = {
+        outside: {
+            leave: 0.80,
+            bunt: 0.60,
+            contact: 0.50,
+            power: 0.40
+        },
+        fastball: {
+            leave: 0.80,
+            bunt: 0.80,
+            contact: 0.75,
+            power: 0.65
+        },
+        curveball: {
+            leave: 0.80,
+            bunt: 0.70,
+            contact: 0.65,
+            power: 0.55
+        },
+        sinker: {
+            leave: 0.80,
+            bunt: 0.60,
+            contact: 0.50,
+            power: 0.40
         }
     };
 
@@ -1257,11 +1273,7 @@
         powerPercentage: document.getElementById('power-percentage'),
         // Scoreboard elements
         visitorRuns: document.getElementById('visitor-runs'),
-        homeRuns: document.getElementById('home-runs'),
-        visitorHits: document.getElementById('visitor-hits'),
-        homeHits: document.getElementById('home-hits'),
-        visitorErrors: document.getElementById('visitor-errors'),
-        homeErrors: document.getElementById('home-errors')
+        homeRuns: document.getElementById('home-runs')
     };
 
     function initGame() {
@@ -1278,18 +1290,19 @@
         document.querySelectorAll('.inning-score').forEach(cell => {
             cell.classList.remove('current-inning');
         });
+        document.querySelectorAll('.scoreboard-header div').forEach(cell => {
+            cell.classList.remove('current-inning');
+        });
         
-        if (gameState.inning <= 9) {
-            document.getElementById(`home-${gameState.inning}`).classList.add('current-inning');
+        if (gameState.inning <= 4) {
+            document.getElementById(`header-${gameState.inning}`).classList.add('current-inning');
         }
         
-        // Update total runs, hits, errors
+        // Update total runs
         elements.homeRuns.textContent = gameState.runs;
-        elements.homeHits.textContent = gameState.hits;
-        elements.homeErrors.textContent = gameState.errors;
         
         // Update inning scores (for now, we'll just show home team scores)
-        for (let i = 1; i <= 9; i++) {
+        for (let i = 1; i <= 4; i++) {
             const homeInning = document.getElementById(`home-${i}`);
             if (homeInning && gameState.inningScores[i-1] !== undefined) {
                 homeInning.textContent = gameState.inningScores[i-1];
@@ -1322,6 +1335,20 @@
         }
     }
 
+    function updateBatterActionPercentages(pitchType) {
+        if (!pitchType) return;
+        
+        const percentageElements = document.querySelectorAll('.batter-option-percentage');
+        const actionButtons = ['leave', 'bunt', 'contact', 'power'];
+        
+        percentageElements.forEach((element, index) => {
+            if (actionButtons[index] && pitchSuccessRates[pitchType] && pitchSuccessRates[pitchType][actionButtons[index]]) {
+                const percentage = Math.round(pitchSuccessRates[pitchType][actionButtons[index]] * 100);
+                element.textContent = `${percentage}%`;
+            }
+        });
+    }
+
     function activateRageMode() {
         gameState.rageMode = true;
         gameState.rageUsed = false;
@@ -1347,7 +1374,14 @@
         
         elements.ballProgress.classList.remove('rage-mode-active');
         elements.powerBtn.classList.remove('rage-mode');
-        elements.powerPercentage.textContent = '40%';
+        
+        // Restore the correct percentage based on current pitch type
+        if (gameState.selectedPitch && pitchSuccessRates[gameState.selectedPitch]) {
+            const powerPercentage = Math.round(pitchSuccessRates[gameState.selectedPitch].power * 100);
+            elements.powerPercentage.textContent = `${powerPercentage}%`;
+        } else {
+            elements.powerPercentage.textContent = '40%'; // Default for outside/sinker
+        }
         
         updateBallProgress();
     }
@@ -1426,6 +1460,7 @@
         elements.strikeZone.style.display = 'block';
         
         animatePitch(pitchTypes[pitchType]);
+        updateBatterActionPercentages(pitchType);
         
         if (gameState.rageMode) {
             updateGameStatus(`RAGE MODE activated`);
@@ -1478,7 +1513,7 @@
             }
         } else {
             let roll = Math.random();
-            let successChance = batterAction.successChance;
+            let successChance = pitchSuccessRates[gameState.selectedPitch][gameState.selectedBatterAction];
             
             if (gameState.rageMode && gameState.selectedBatterAction === 'power') {
                 successChance = 0.99;
@@ -1651,6 +1686,14 @@
         document.querySelectorAll('.batter-option-btn').forEach(btn => {
             btn.style.opacity = '1';
             btn.style.transform = 'scale(1)';
+        });
+        
+        // Reset percentages to default (outside/sinker values)
+        document.querySelectorAll('.batter-option-percentage').forEach((element, index) => {
+            const defaultPercentages = ['80%', '60%', '50%', '40%'];
+            if (defaultPercentages[index]) {
+                element.textContent = defaultPercentages[index];
+            }
         });
         
         resetBallPosition();
